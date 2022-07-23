@@ -1,0 +1,10 @@
+{
+  "name": "gql-nest-next",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/naopin/gql-nest-next.git",
+  "license": "MIT",
+  "dependencies": {
+    "@nestjs/cli": "^9.0.0"
+  }
+}
