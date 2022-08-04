@@ -1,7 +1,7 @@
 import { initUrqlClient } from 'next-urql';
 import { Client } from 'urql';
 
-const GRAPHQL_ENDPOINT = "http://localhost:3000/graphql";
+const GRAPHQL_ENDPOINT = "http://localhost:3333/graphql";
 
 export function urqlClient(): Promise<Client> {
   return new Promise((resolve, reject) => {
