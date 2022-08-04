@@ -1,20 +1,33 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import * as path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostsModule } from './components/posts/posts.module';
+import { PrismaModule } from './components/prisma/prisma.module';
+import { PbEnvModule } from './config/environments/pb-env.module';
+import { PbEnv } from './config/environments/pb-env.service';
+import { WinstonModule } from 'nest-winston';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
-      autoSchemaFile: path.join(
-        process.cwd(),
-        'src/generated/graphql/schema.gql',
-      ),
-      sortSchema: true,
+    PbEnvModule,
+    GraphQLModule.forRootAsync({
+      inject: [PbEnv],
+      useFactory: (env: PbEnv) => env.GqlModuleOptionsFactory,
     }),
-    PostsModule, // これ
+    WinstonModule.forRootAsync({
+      inject: [PbEnv],
+      useFactory: (env: PbEnv) => env.WinstonModuleOptionsFactory,
+    }),
+    PrismaModule.forRootAsync({
+      imports: [WinstonModule],
+      inject: [PbEnv],
+      isGlobal: true,
+      useFactory: (env: PbEnv) => ({
+        prismaOptions: env.PrismaOptionsFactory,
+      }),
+    }),
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
