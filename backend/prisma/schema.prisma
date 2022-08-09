@@ -28,3 +28,15 @@ model Post {
  @@index([contentPath])
  @@map("posts")
 }
+
+model Todo {
+ id           String    @id @default(uuid())
+ name         String
+ dueDate      String
+ status       String
+ memo         String
+ createdAt    DateTime  @default(now()) @map("created_at")
+ updatedAt    DateTime  @updatedAt @map("updated_at")
+
+ @@map("todo")
+}
