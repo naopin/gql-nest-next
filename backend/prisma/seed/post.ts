@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, Post } from '@prisma/client';
+import { PrismaClient, Prisma, Post, Todo } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // モデル投入用のデータ定義
@@ -50,7 +50,19 @@ const postData: Post[] = [
   },
 ];
 
-export const prismaCreateTodo = async () => {
+const todoData: Todo[] = [
+  {
+    id: 'fa119cb6-9135-57f5-8a5a-54f28d566d0e',
+    name: 'todo',
+    dueDate: '202208-20',
+    status: 'done',
+    memo: '不死鳥',
+    createdAt: new Date('2022-01-31T04:34:22+09:00'),
+    updatedAt: new Date('2022-01-31T04:34:22+09:00'),
+  },
+];
+
+export const doSeed = async () => {
   const posts = [];
   for (const post of postData) {
     const createPosts = prisma.post.create({
@@ -58,7 +70,18 @@ export const prismaCreateTodo = async () => {
     });
     posts.push(createPosts);
   }
-  prisma.$transaction(posts);
+  return await prisma.$transaction(posts);
+};
+
+export const prismaCreateTodo = async () => {
+  const todos = [];
+  for (const todo of todoData) {
+    const createPosts = prisma.todo.create({
+      data: todo,
+    });
+    todos.push(createPosts);
+  }
+  prisma.$transaction(todos);
 };
 
 // const main = async () => {

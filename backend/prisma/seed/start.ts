@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client';
-import { prismaCreateTodo } from './post';
-
+import { doSeed, prismaCreateTodo } from './post';
 
 const prisma = new PrismaClient();
 
 const main = async () => {
   console.log(`Start seeding ...`);
+  await doSeed();
   await prismaCreateTodo();
   console.log(`Seeding finished.`);
 };
