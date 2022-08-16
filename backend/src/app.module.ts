@@ -7,6 +7,7 @@ import { PrismaModule } from './components/prisma/prisma.module';
 import { PbEnvModule } from './config/environments/pb-env.module';
 import { PbEnv } from './config/environments/pb-env.service';
 import { WinstonModule } from 'nest-winston';
+import { TodosModule } from './components/todos/todos.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { WinstonModule } from 'nest-winston';
       }),
     }),
     PostsModule,
+    TodosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

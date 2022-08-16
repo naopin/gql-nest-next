@@ -5,14 +5,32 @@ import Image from "next/image";
 import { urqlClient } from "../src/libs/gql-requests";
 import styles from "../styles/Home.module.css";
 
+// type Props = {
+//   posts: {
+//     id: string;
+//     title: string;
+//   }[];
+// };
+// type Todos = {
+//   todos: {
+//     id: string;
+//     name: string;
+//   }[];
+// };
+
 type Props = {
   posts: {
     id: string;
     title: string;
-  }[];
-};
+  }[],
+  todos: {
+    id: string;
+    name: string;
+  }[]
+}
 
 const Home: NextPage<Props> = (props) => {
+  console.log(props)
  return (
    <div className={styles.container}>
      <Head>
@@ -24,9 +42,15 @@ const Home: NextPage<Props> = (props) => {
      <main className={styles.main}>
        <h1 className={styles.title}>Hello, GraphQL</h1>
        <ul className={styles.grid}>
-         {props.posts.map((post) => (
+         {/* {props.posts.map((post) => (
            <li className={styles.title} key={post.id}>
              id: {post.id} title: {post.title}
+           </li>
+         ))} */}
+
+        {props.todos.map((todo) => (
+           <li className={styles.title} key={todo.id}>
+             id: {todo.id} name: {todo.name}
            </li>
          ))}
        </ul>
@@ -51,6 +75,7 @@ const Home: NextPage<Props> = (props) => {
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
  try {
     const client = await urqlClient();
+    console.log("aa")
 
     // 変数なしでGraphQL呼び出し
     const postsQuery = gql`
@@ -61,11 +86,22 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
         }
       }
     `;
+
+  const todosQuery = gql`
+  query {
+    todos {
+      id
+      name
+    }
+  }
+  `;
     const result = await client.query(postsQuery, {}).toPromise();
+    const todoResults = await client.query(todosQuery , {}).toPromise();
 
     return {
       props: {
         posts: result.data.posts,
+        todos: todoResults.data.todos,
       },
     };
   } catch (e) {
