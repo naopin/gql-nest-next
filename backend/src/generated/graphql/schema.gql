@@ -21,6 +21,17 @@ type PostModel {
 
 type Query {
   fixedPosts: [PostModel!]
+  fixedTodo: [TodoModel!]
   posts(type: [String!]): [PostModel!]
   prismaPosts: [PostModel!]
+  prismaTodos: [TodoModel!]
+  todos(type: [String!]): [TodoModel!]
+}
+
+type TodoModel {
+  dueDate: String!
+  id: ID!
+  memo: String!
+  name: String!
+  status: String!
 }
