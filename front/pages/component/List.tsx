@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Grid } from "@material-ui/core";
-import Todo from './Todo';
+import TodoList from './Todo';
+import { Todo } from '../Type';
 
 
-const List: React.FC = () => {
+export type Props = {
+    lists: Array<Todo>
+}
+  
+const List: React.FC<Props> = ({lists}) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [isError, setIsError] = useState<boolean>(false);
-
-
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -21,7 +24,10 @@ const List: React.FC = () => {
     }
     return (
         <Grid container>
-            <Todo />
+         {lists.map((todo) => (
+            <TodoList key={todo.id} todo={todo.name} />
+          ))}
+     
         </Grid>
     );
 }
