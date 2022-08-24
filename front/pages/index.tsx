@@ -8,14 +8,11 @@ import { urqlClient } from "../src/libs/gql-requests";
 import styles from "../styles/Home.module.css";
 import { Fragment } from "react";
 import AddTodoForm from "./component/AddTodoForm";
+import List from "./component/List";
 
 
 
 type Props = {
-  posts: {
-    id: string;
-    title: string;
-  }[],
   todos: {
     id: string;
     name: string;
@@ -42,14 +39,6 @@ const Home: NextPage<Props> = (props) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Todo List</h1>
-        <ul className={styles.grid}>
-
-          {props.todos.map((todo) => (
-            <div className={styles.title} key={todo.id}>
-              <FormControlLabel control={<Checkbox defaultChecked />} label={todo.name} />
-            </div>
-          ))}
-        </ul>
 
         <Fragment>
           <Grid container spacing={0}>
@@ -59,11 +48,9 @@ const Home: NextPage<Props> = (props) => {
               </Paper>
             </Grid>
             <Grid item xs={12} className={styles.Paper}>
-              <ul>
-                <li>aàaaaaaa</li>
-                <li>aàaaaaaa</li>
-                <li>aàaaaaaa</li>
-              </ul>
+            <List
+              lists={props.todos}
+            />
             </Grid>
           </Grid>
         </Fragment>
@@ -89,18 +76,6 @@ const Home: NextPage<Props> = (props) => {
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
   try {
     const client = await urqlClient();
-    console.log("aa")
-
-    // 変数なしでGraphQL呼び出し
-    const postsQuery = gql`
-      query {
-        posts {
-          id
-          title
-        }
-      }
-    `;
-
     const todosQuery = gql`
   query {
     todos {
@@ -109,12 +84,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
     }
   }
   `;
-    const result = await client.query(postsQuery, {}).toPromise();
+
     const todoResults = await client.query(todosQuery, {}).toPromise();
 
     return {
       props: {
-        posts: result.data.posts,
         todos: todoResults.data.todos,
       },
     };

@@ -3,8 +3,11 @@ import { Delete, Build } from "@material-ui/icons";
 import { Grid, Paper } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 
+export type Props = {
+    todo: string
+}
 
-const Todo: React.FC = () => {
+const Todo: React.FC<Props>  = ({todo}) => {
    
 
     const [state, setState] = useState(false)
@@ -30,8 +33,7 @@ const Todo: React.FC = () => {
         className={`${gridClass}`}
       >
         <Paper elevation={2} style={styles.Paper}>
-          {/* <span style={styles.Todo}>a</span> */}
-          <span>aassss</span>
+            <span>{todo}</span>
           <IconButton
             color="primary"
             aria-label="Edit"
